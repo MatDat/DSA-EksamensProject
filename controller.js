@@ -13,11 +13,16 @@ class Controller {
   initialize() {
     this.setupBoard();
     this.clickableBoard();
+    this.view.displayRestartButton();
+    this.handleRestartBtn();
   }
 
   setupBoard() {
     const boardState = this.model.getBoardState();
-    this.view.createBoard(boardState);
+    this.view.createBoardVisuals(boardState);
+
+    //Set initial currentPlayer = 1
+    this.view.displayPlayerOrder(this.currentPlayer);
   }
 
   clickableBoard() {
@@ -39,11 +44,21 @@ class Controller {
     }
   }
 
+  handleRestartBtn() {
+    document.querySelector("#restartBtn").addEventListener("click", () => {
+      this.model.resetBoard();
+      const boardState = this.model.getBoardState();
+      this.view.createBoardVisuals(boardState);
+      this.currentPlayer = 1;
+      this.view.displayPlayerOrder(this.currentPlayer);
+    });
+  }
+
   selectCell(row, col) {
     if (this.model.readFromCell(row, col) === 0) {
       this.model.writeToCell(row, col, this.currentPlayer);
       const boardState = this.model.getBoardState();
-      this.view.createBoard(boardState);
+      this.view.createBoardVisuals(boardState);
       this.nextTurn();
     } else {
       console.log("Click another cell!");
@@ -56,6 +71,8 @@ class Controller {
     } else if (this.currentPlayer === 2) {
       this.currentPlayer = 1;
     }
+    // AFTER move, update currentplayer display
+    this.view.displayPlayerOrder(this.currentPlayer);
   }
 }
 

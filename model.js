@@ -7,6 +7,15 @@ export default class Model {
     ];
   }
 
+  resetBoard() {
+    this.boardGrid = [
+      [0, 0, 0],
+      [0, 0, 0],
+      [0, 0, 0],
+    ];
+    return this.boardGrid;
+  }
+
   writeToCell(row, col, value) {
     this.boardGrid[row][col] = value;
   }

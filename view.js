@@ -3,7 +3,7 @@ export default class View {
     this.controller = controller;
   }
 
-  createBoard(boardState) {
+  createBoardVisuals(boardState) {
     for (let row = 0; row < 3; row++) {
       for (let col = 0; col < 3; col++) {
         const cell = document.querySelector(
@@ -21,10 +21,31 @@ export default class View {
             cell.textContent = "O";
             break;
           default:
-            console.log("CLick a cell!");
+            console.log("Wooooot?!");
             break;
         }
       }
     }
+  }
+
+  displayPlayerOrder(currentPlayer) {
+    const infoBox = document.querySelector("#infoBox");
+    infoBox.innerHTML = /*html*/ `<h2>Player ${currentPlayer}'s turn!</h2>`;
+  }
+
+  displayWinner(currentPlayer) {
+    const infoBox = document.querySelector("#infoBox");
+    infoBox.innerHTML = "";
+    infoBox.innerHTML = /*html*/ `Player ${currentPlayer}`;
+  }
+
+  displayRestartButton() {
+    const html = /*html*/ `
+    <div>
+        <button id="restartBtn">Restart</button>
+    </div>
+    `;
+
+    document.querySelector("#infoBox").insertAdjacentHTML("afterend", html);
   }
 }
