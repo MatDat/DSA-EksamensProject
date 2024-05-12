@@ -36,7 +36,9 @@ export default class View {
   displayWinner(currentPlayer) {
     const infoBox = document.querySelector("#infoBox");
     infoBox.innerHTML = "";
-    infoBox.innerHTML = /*html*/ `Player ${currentPlayer}`;
+    infoBox.innerHTML = /*html*/ `<h2>!! PLAYER ${currentPlayer} WINS !!</h2>
+    <p style="margin-top:10px;">\nPress restart to play again.</p>`;
+    console.log(`Player ${currentPlayer} won the game`);
   }
 
   displayRestartButton() {
