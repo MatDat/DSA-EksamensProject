@@ -66,10 +66,15 @@ class Controller {
       this.model.writeToCell(row, col, this.currentPlayer);
       const boardState = this.model.getBoardState();
       this.view.createBoardVisuals(boardState);
+
       const winner = this.model.checkWinner();
+
       if (winner !== 0) {
         this.view.displayWinner(winner);
-        this.gameOver = true; // Set game over
+        this.gameOver = true;
+      } else if (this.model.checkDraw()) {
+        this.view.displayDraw();
+        this.gameOver = true;
       } else {
         this.nextTurn();
       }

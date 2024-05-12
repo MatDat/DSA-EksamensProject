@@ -41,6 +41,14 @@ export default class View {
     console.log(`Player ${currentPlayer} won the game`);
   }
 
+  displayDraw() {
+    const infoBox = document.querySelector("#infoBox");
+    infoBox.innerHTML = "";
+    infoBox.innerHTML = /*html*/ `<h2>!! DRAW !!</h2>
+    <p style="margin-top:10px;">\nPress restart to play again.</p>`;
+    console.log(`Game was a draw!`);
+  }
+
   displayRestartButton() {
     const html = /*html*/ `
     <div>
