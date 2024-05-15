@@ -24,40 +24,24 @@ class Controller {
     this.view.displayPlayerOrder(this.currentPlayer);
   }
 
-  clickHandler() {
-    document.querySelector("body").addEventListener("click", (event) => {
+    clickHandler() {
+    document.querySelector("#board").addEventListener("click", (event) => {
       const cell = event.target;
       const row = cell.dataset.row;
       const col = cell.dataset.col;
 
-      // Handle click outside board
-      if (!cell.closest("#board") && !cell.closest("#restartBtn")) {
-        console.log("Clicked outside board!");
-        return;
-      }
-
-      // Handle cell click if the game is not over
-      if (!this.gameOver && row !== undefined && col !== undefined) {
-        console.log(`Clicked on row: ${row}, col: ${col}`);
+      if (row !== undefined && col !== undefined && !this.gameOver) {
         this.selectCell(row, col);
-
-        // Handle restart button click regardless of the game state
-      } else if (cell.closest("#restartBtn")) {
-        console.log("Restarted game.");
-        this.model.resetBoard();
-        const boardState = this.model.getBoardState();
-        this.view.createBoardVisuals(boardState);
-        this.currentPlayer = 1;
-        this.view.displayPlayerOrder(this.currentPlayer);
-        this.gameOver = false; // Reset game over state
-
-        // Handle click inside board but outside cell
-        //  Game is over clicks
-      } else if (this.gameOver) {
-        console.log("Game is over");
-      } else {
-        console.log("Clicked outside cell!");
       }
+    });
+
+    document.querySelector("#restartBtn").addEventListener("click", () => {
+      this.model.resetBoard();
+      const boardState = this.model.getBoardState();
+      this.view.createBoardVisuals(boardState);
+      this.currentPlayer = 1;
+      this.view.displayPlayerOrder(this.currentPlayer);
+      this.gameOver = false;
     });
   }
 
