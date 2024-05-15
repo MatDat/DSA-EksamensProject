@@ -83,7 +83,7 @@ class Controller {
     }
   }
 
-   nextTurn() {
+  nextTurn() {
     if (this.currentPlayer === 1) {
       this.model.computerMove();
       const boardState = this.model.getBoardState();
