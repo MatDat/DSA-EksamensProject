@@ -83,15 +83,27 @@ class Controller {
     }
   }
 
-  nextTurn() {
+   nextTurn() {
     if (this.currentPlayer === 1) {
       this.model.computerMove();
-      this.currentPlayer = 2;
-    } else if (this.currentPlayer === 2) {
+      const boardState = this.model.getBoardState();
+      this.view.createBoardVisuals(boardState);
+
+      const winner = this.model.checkWinner();
+      if (winner !== 0) {
+        this.view.displayWinner(winner);
+        this.gameOver = true;
+      } else if (this.model.checkDraw()) {
+        this.view.displayDraw();
+        this.gameOver = true;
+      } else {
+        this.currentPlayer = 2;
+        this.view.displayPlayerOrder(this.currentPlayer);
+      }
+    } else {
       this.currentPlayer = 1;
+      this.view.displayPlayerOrder(this.currentPlayer);
     }
-    // AFTER move, update currentplayer display
-    this.view.displayPlayerOrder(this.currentPlayer);
   }
 }
 
