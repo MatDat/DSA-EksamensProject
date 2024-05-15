@@ -13,8 +13,8 @@ class Controller {
 
   initialize() {
     this.setupBoard();
-    this.clickHandler();
     this.view.displayRestartButton();
+    this.clickHandler();
   }
 
   setupBoard() {
@@ -24,7 +24,7 @@ class Controller {
     this.view.displayPlayerOrder(this.currentPlayer);
   }
 
-    clickHandler() {
+  clickHandler() {
     document.querySelector("#board").addEventListener("click", (event) => {
       const cell = event.target;
       const row = cell.dataset.row;
@@ -34,7 +34,6 @@ class Controller {
         this.selectCell(row, col);
       }
     });
-
     document.querySelector("#restartBtn").addEventListener("click", () => {
       this.model.resetBoard();
       const boardState = this.model.getBoardState();
@@ -69,6 +68,7 @@ class Controller {
 
   nextTurn() {
     if (this.currentPlayer === 1) {
+      this.model.currentPlayer = 2;
       this.model.computerMove();
       const boardState = this.model.getBoardState();
       this.view.createBoardVisuals(boardState);
