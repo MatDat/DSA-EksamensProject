@@ -1,7 +1,5 @@
 export default class View {
-  constructor(controller) {
-    this.controller = controller;
-  }
+  constructor() {}
 
   createBoardVisuals(boardState) {
     for (let row = 0; row < 3; row++) {
@@ -9,53 +7,39 @@ export default class View {
         const cell = document.querySelector(
           `[data-row="${row}"][data-col="${col}"]`
         );
-
-        switch (boardState[row][col]) {
-          case 0:
-            cell.textContent = " ";
-            break;
-          case 1:
-            cell.textContent = "X";
-            break;
-          case 2:
-            cell.textContent = "O";
-            break;
-          default:
-            console.log("Wooooot?!");
-            break;
-        }
+        cell.textContent =
+          boardState[row][col] === 1
+            ? "X"
+            : boardState[row][col] === 2
+            ? "O"
+            : "";
       }
     }
   }
 
   displayPlayerOrder(currentPlayer) {
     const infoBox = document.querySelector("#infoBox");
-    infoBox.innerHTML = /*html*/ `<h2>Player ${currentPlayer}'s turn!</h2>`;
+    infoBox.innerHTML = `<h2>Player ${currentPlayer}'s turn!</h2>`;
   }
 
-  displayWinner(currentPlayer) {
+  displayWinner(winner) {
     const infoBox = document.querySelector("#infoBox");
-    infoBox.innerHTML = "";
-    infoBox.innerHTML = /*html*/ `<h2>!! PLAYER ${currentPlayer} WINS !!</h2>
-    <p style="margin-top:10px;">\nPress restart to play again.</p>`;
-    console.log(`Player ${currentPlayer} won the game`);
+    infoBox.innerHTML = `<h2>!! PLAYER ${winner} WINS !!</h2>
+      <p style="margin-top:10px;">Press restart to play again.</p>`;
   }
 
   displayDraw() {
     const infoBox = document.querySelector("#infoBox");
-    infoBox.innerHTML = "";
-    infoBox.innerHTML = /*html*/ `<h2>!! DRAW !!</h2>
-    <p style="margin-top:10px;">\nPress restart to play again.</p>`;
-    console.log(`Game was a draw!`);
+    infoBox.innerHTML = `<h2>!! DRAW !!</h2>
+      <p style="margin-top:10px;">Press restart to play again.</p>`;
   }
 
   displayRestartButton() {
-    const html = /*html*/ `
-    <div>
-        <button id="restartBtn">Restart</button>
-    </div>
-    `;
-
-    document.querySelector("#infoBox").insertAdjacentHTML("afterend", html);
+    const restartButton = document.createElement("button");
+    restartButton.id = "restartBtn";
+    restartButton.textContent = "Restart";
+    document
+      .querySelector("#infoBox")
+      .insertAdjacentElement("afterend", restartButton);
   }
 }

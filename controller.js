@@ -3,61 +3,45 @@ import View from "./view.js";
 
 class Controller {
   constructor() {
-    this.model = new Model(this);
-    this.view = new View(this);
+    this.model = new Model();
+    this.view = new View();
 
-    window.model = this.model;
-    this.gameOver = false;
-  }
-  currentPlayer = 1;
-
-  initialize() {
-    this.setupBoard();
     this.view.displayRestartButton();
-    this.clickHandler();
-  }
+    this.view.createBoardVisuals(this.model.getBoard());
+    this.view.displayPlayerOrder(this.model.currentPlayer);
 
-  setupBoard() {
-    const boardState = this.model.getBoardState();
-    this.view.createBoardVisuals(boardState);
-    //Set initial currentPlayer = 1
-    this.view.displayPlayerOrder(this.currentPlayer);
+    this.clickHandler();
   }
 
   clickHandler() {
     document.querySelector("#board").addEventListener("click", (event) => {
       const cell = event.target;
-      const row = cell.dataset.row;
-      const col = cell.dataset.col;
+      const row = parseInt(cell.dataset.row);
+      const col = parseInt(cell.dataset.col);
 
-      if (row !== undefined && col !== undefined && !this.gameOver) {
+      if (row !== undefined && col !== undefined && !this.model.checkWinner()) {
         this.selectCell(row, col);
       }
     });
+
     document.querySelector("#restartBtn").addEventListener("click", () => {
       this.model.resetBoard();
-      const boardState = this.model.getBoardState();
-      this.view.createBoardVisuals(boardState);
-      this.currentPlayer = 1;
-      this.view.displayPlayerOrder(this.currentPlayer);
-      this.gameOver = false;
+      this.view.createBoardVisuals(this.model.getBoard());
+      this.model.currentPlayer = 1;
+      this.view.displayPlayerOrder(this.model.currentPlayer);
     });
   }
 
   selectCell(row, col) {
     if (this.model.readFromCell(row, col) === 0) {
-      this.model.writeToCell(row, col, 1);
-      const boardState = this.model.getBoardState();
-      this.view.createBoardVisuals(boardState);
+      this.model.writeToCell(row, col, this.model.currentPlayer);
+      this.view.createBoardVisuals(this.model.getBoard());
 
       const winner = this.model.checkWinner();
-
       if (winner !== 0) {
         this.view.displayWinner(winner);
-        this.gameOver = true;
       } else if (this.model.checkDraw()) {
         this.view.displayDraw();
-        this.gameOver = true;
       } else {
         this.nextTurn();
       }
@@ -67,29 +51,22 @@ class Controller {
   }
 
   nextTurn() {
-    if (this.currentPlayer === 1) {
+    if (this.model.currentPlayer === 1) {
       this.model.currentPlayer = 2;
       this.model.computerMove();
-      const boardState = this.model.getBoardState();
-      this.view.createBoardVisuals(boardState);
+      this.view.createBoardVisuals(this.model.getBoard());
 
       const winner = this.model.checkWinner();
       if (winner !== 0) {
         this.view.displayWinner(winner);
-        this.gameOver = true;
       } else if (this.model.checkDraw()) {
         this.view.displayDraw();
-        this.gameOver = true;
       } else {
-        this.currentPlayer = 2;
-        this.view.displayPlayerOrder(this.currentPlayer);
+        this.model.currentPlayer = 1;
+        this.view.displayPlayerOrder(this.model.currentPlayer);
       }
-    } else {
-      this.currentPlayer = 1;
-      this.view.displayPlayerOrder(this.currentPlayer);
     }
   }
 }
 
-let controller = new Controller();
-window.addEventListener("load", () => controller.initialize());
+window.addEventListener("load", () => new Controller());
