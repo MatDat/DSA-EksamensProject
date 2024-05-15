@@ -63,7 +63,7 @@ class Controller {
 
   selectCell(row, col) {
     if (this.model.readFromCell(row, col) === 0) {
-      this.model.writeToCell(row, col, this.currentPlayer);
+      this.model.writeToCell(row, col, 1);
       const boardState = this.model.getBoardState();
       this.view.createBoardVisuals(boardState);
 
@@ -85,6 +85,7 @@ class Controller {
 
   nextTurn() {
     if (this.currentPlayer === 1) {
+      this.model.computerMove();
       this.currentPlayer = 2;
     } else if (this.currentPlayer === 2) {
       this.currentPlayer = 1;

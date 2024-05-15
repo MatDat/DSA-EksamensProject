@@ -87,4 +87,69 @@ export default class Model {
     //If no winner found
     return 0;
   }
+
+  computerMove() {
+    let bestScore = -Infinity;
+    let move;
+
+    for (let row = 0; row < 3; row++) {
+      for (let col = 0; col < 3; col++) {
+        if (this.boardGrid[row][col] === 0) {
+          this.boardGrid[row][col] = 2;
+          let score = this.minmax(this.boardGrid, 0, false);
+          this.boardGrid[row][col] = 0;
+
+          console.log("board:" + this.boardGrid);
+          console.log("score: " + score);
+          if (score > bestScore) {
+            bestScore = score;
+            move = { row, col };
+          }
+        }
+      }
+    }
+    if (move) {
+      this.writeToCell(move.row, move.col, 2);
+      console.log("FNUUUUG");
+    }
+  }
+
+  minmax(boardGrid, depth, isMaximizing) {
+    const score = this.checkWinner();
+
+    if (score === 10) return score - depth;
+    if (score === -10) return score + depth;
+
+    if (isMaximizing) {
+      let bestScore = -Infinity;
+      for (let row = 0; row < 3; row++) {
+        for (let col = 0; col < 3; col++) {
+          if (boardGrid[row][col] === 0) {
+            boardGrid[row][col] = 2;
+            bestScore = Math.max(
+              bestScore,
+              this.minmax(boardGrid, depth + 1, false)
+            );
+            boardGrid[row][col] = 0;
+          }
+        }
+      }
+      return bestScore;
+    } else {
+      let bestScore = Infinity;
+      for (let row = 0; row < 3; row++) {
+        for (let col = 0; col < 3; col++) {
+          if (boardGrid[row][col] === 0) {
+            boardGrid[row][col] = 1;
+            bestScore = Math.max(
+              bestScore,
+              this.minmax(boardGrid, depth + 1, true)
+            );
+            boardGrid[row][col] = 0;
+          }
+        }
+      }
+      return bestScore;
+    }
+  }
 }
