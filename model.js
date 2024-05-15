@@ -119,6 +119,7 @@ export default class Model {
 
     if (score === 10) return score - depth;
     if (score === -10) return score + depth;
+    if (this.checkDraw()) return 0;
 
     if (isMaximizing) {
       let bestScore = -Infinity;
@@ -141,7 +142,7 @@ export default class Model {
         for (let col = 0; col < 3; col++) {
           if (boardGrid[row][col] === 0) {
             boardGrid[row][col] = 1;
-            bestScore = Math.max(
+            bestScore = Math.min(
               bestScore,
               this.minmax(boardGrid, depth + 1, true)
             );
