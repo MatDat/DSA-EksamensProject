@@ -5,6 +5,7 @@ export default class Model {
       [0, 0, 0],
       [0, 0, 0],
     ];
+
     this.currentPlayer = 1;
   }
 
